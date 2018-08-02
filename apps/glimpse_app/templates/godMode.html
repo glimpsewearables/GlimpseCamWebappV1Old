@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>God Mode</title>
+    {% load staticfiles %}
+<!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="main.js"></script>
+</head>
+<style>
+.centerHorizontal{
+    text-align: center;
+}
+h2{
+  padding-left: 20px;
+  padding-top: 20px;
+}
+</style>
+<body>
+        <div class="container">
+            <div class="header"></div>
+                <h1 class="centerHorizontal">Dylans Users Page</h1>
+                <a href="/logout">Logout</a>
+            </div>
+            <div class="contentContainer">
+                <div class="allUserInformation">
+                    <h2>Registered Users</h2>
+                    <table class="table table-hover table-dark">
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Device</th>
+                                <th scope="col">Images</th>
+                                <th scope="col">Videos</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        {% for user in users %}
+                            {% csrf_token %}
+                        <tbody>
+                            <td>{{user.full_name}}</td>
+                            <td>{{user.email_address}}</td>
+                            <td>{{user.phone_number}}</td>
+                            <td>{{user.device_key_name}}</td>
+                            <td>{{user.number_pics}}</td>
+                            <td>{{user.number_vids}}</td>
+                            <td>
+                                <a href="/viewUserInfoGodMode/{{user.device_key_name}}">View</a>
+                                <a href="/deleteUser/{{user.id}}">Delete</a>
+                            </td>
+                        </tbody>
+                        {% endfor %}
+                    </table>
+                    <h2>Camera Information</h2>
+                    <table class="table table-hover table-dark">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Serial Number</th>
+                                <th scope="col">Images</th>
+                                <th scope="col">Videos</th>
+                                <th scope="col">RunTime</th>
+                                <th scope="col">Wifi</th>
+                            </tr>
+                        </thead>
+                        {% for camera in devices %}
+                        {% csrf_token %}
+                        <tbody>
+                            <td>{{camera.device_owner.device_key_name}}</td>
+                            <td>{{camera.device_key_name}}</td>
+                            <td>{{camera.number_pics}}</td>
+                            <td>{{camera.number_vids}}</td>
+                            <td></td>
+                            <td></td>
+                        </tbody>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
