@@ -10,7 +10,6 @@
   Logic has been installed making it so you have to sign in with the correct email and device key number that you previously entered in atregistration page. 
 ##### God Mode Process
 *For the "GodMode" page*
-  The username is "Dylan Rose" and the password is "isourboss"
   This page is still incomplete but will eventually show information about each camera, battery life, images taken, videos taken, data used, etc.
   This page will also show a complete list of EVERY single image and video that has been taken, giving the admin in charge access to everything for testing purposes
 ### Things that still need to be done
