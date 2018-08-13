@@ -1,16 +1,15 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.db import models
 from .models import User, Device
-import bcrypt, sys, os, base64, datetime, hashlib, hmac 
+import bcrypt, sys, os, base64, datetime, hashlib, hmac
 from django.contrib import messages
 import boto3, csv
-import pandas as pd
 # The below key is how we need to connect to the AWS without having our server hard coded with the keys
 # conn = boto.connect_s3(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
 # bucket = conn.get_bucket("<your-bucket-name>")
 client = boto3.client('s3') #low-level functional API
 resource = boto3.resource('s3') #high-level object-oriented API
-test_bucket = resource.Bucket('pi-1') #subsitute this for your s3 bucket name. 
+test_bucket = resource.Bucket('pi-1') #subsitute this for your s3 bucket name.
 
 def index(request):
     return render(request, "homepage.html")
@@ -153,4 +152,3 @@ def viewImage(request, match):
         'image': match
     }
     return render(request, "viewImage.html", cont)
-    
