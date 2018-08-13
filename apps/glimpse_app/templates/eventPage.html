@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 </head>
 <style>
   .gallery-block.grid-gallery{
@@ -65,8 +66,9 @@
   .gallery-header-text{
     text-align: center;
     font-size:1.9em;
-    padding-top: .5em;
+    padding-top: 1em;
     font-weight: bold;
+    color: #444;
   }
   .gallery-header-container{
 
@@ -76,7 +78,7 @@
     background-color: #fff;
     border-color: #fff;
     text-align:center;
-    padding-top: 2em;
+    padding-top: 5em;
   }
   .panel-heading a{
     text-decoration: none;
@@ -88,7 +90,7 @@
     transition: all 0.1s linear;
   }
   .panel-heading a.active{
-    color: #029f5b;
+    color: #027f5b;
     font-size: 18px;
   }
   .panel-heading hr{
@@ -113,8 +115,8 @@
     <div class="tab-content center-block">
       <div class="heading">
           <h2 class="gallery-header-text">{{name}}'s Gallery</h2>
-          <a style="float: left" href="javascript:history.back()">Go Back</a>
-          <a style="float: right" href="/logout">Logout</a>
+          <a style="float: left" href="javascript:history.back()"><i class="fas fa-arrow-left" style="font-size:2em; color:#027f5b"></i></a>
+          <a style="float: right" href="/logout"> <i class="fas fa-sign-out-alt" style="font-size:2em; color:#027f5b"></i></a>
       </div>
       <div class="panel-heading">
         <div class="row">
