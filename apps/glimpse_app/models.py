@@ -32,6 +32,17 @@ class UserManager(models.Manager):
                 errors['checkDevice'] = ("Make sure you enter the correct device number")
         return errors
 
+class EventManager(models.Manager):
+    def basic_validator(self, postData):
+        errors = {}
+        if (len(postData['eventName']) == 0):
+            errors['eventName'] = ("Do Not Leave The Event Name Field Blank")
+        if (len(postData['venueName']) == 0):
+            errors['venueName'] = ("Do Not Leave The Venue Name Field Blank")
+        if (len(postData['address']) == 0):
+            errors['address'] = ("Do Not Leave The Address Field Blank")
+        return errors
+            
 class User(models.Model):
     full_name = models.CharField(max_length = 45)
     email_address = models.CharField(max_length = 45)
@@ -46,12 +57,23 @@ class User(models.Model):
 class Device(models.Model):
     device_owner = models.ForeignKey(User, related_name="devices")
     device_key_name = models.CharField(max_length = 45)
+    serial_number = models.CharField(max_length=14)
     number_pics = models.IntegerField()
     number_vids = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+class Event(models.Model):
+    name = models.CharField(max_length = 245)
+    venue_name = models.CharField(max_length = 245)
+    address = models.CharField(max_length = 245)
+    start_date = models.DateTimeField(blank=True, null=True)
+    end_date = models.DateTimeField(blank=True, null=True)
+    objects = EventManager()
+
 class Media(models.Model):
     media_type = models.CharField(max_length=10)# either jpeg, or mp4
     uploader = models.ForeignKey(User, related_name="uploads")
+    s3_key = models.CharField(max_length=245)
+    event = models.ForeignKey(Event, related_name="media_at_event")
     created_at = models.DateTimeField(auto_now_add=True)

@@ -82,6 +82,47 @@ h2{
                         </tbody>
                         {% endfor %}
                     </table>
+                    {% if messages %}
+                        {% for message in messages %}
+                        <p>{{ message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                    <form action="/createEvent" method="POST" role="form" style="display: block;">
+                        {% csrf_token %}
+                        <input type="text" name="eventName" tabindex="1" class="form-control" placeholder="Event Name">
+                        <input type="text" name="venueName" tabindex="1" class="form-control" placeholder="Venue Name">
+                        <input type="text" name="address" tabindex="1" class="form-control" placeholder="Address">
+                        <input type="date" name="startDate" tabindex="1" class="form-control" placeholder="Start Date">
+                        <input type="date" name="endDate" tabindex="1" class="form-control" placeholder="End Date">
+                        <input type="submit" tabindex="4" class="form-control btn btn-login" value="Create Event">					
+                    </form>
+                    <h2>Event Information</h2>
+                    <table class="table table-hover table-dark">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Venue</th>
+                                <th scope="col">Address</th>
+                                <th scope="col">Images</th>
+                                <th scope="col">Videos</th>
+                                <th scope="col">Dates</th>
+                            </tr>
+                        </thead>
+                        {% for event in events %}
+                        {% csrf_token %}
+                        <tbody>
+                            <td>{{event.id}}</td>
+                            <td>{{event.name}}</td>
+                            <td>{{event.venue_name}}</td>
+                            <td>{{event.address}}</td>
+                            <td>{{event.number_pics}}</td>
+                            <td>{{event.number_vids}}</td>
+                            <td>{{event.start_date}} to {{event.end_date}}</td>
+                            <td></td>
+                        </tbody>
+                        {% endfor %}
+                    </table>
                 </div>
             </div>
         </div>

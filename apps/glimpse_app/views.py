@@ -1,13 +1,9 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.db import models
-from .models import User, Device
+from .models import User, Device, Event, Media
 import bcrypt, sys, os, base64, datetime, hashlib, hmac 
 from django.contrib import messages
 import boto3, csv
-import pandas as pd
-# The below key is how we need to connect to the AWS without having our server hard coded with the keys
-# conn = boto.connect_s3(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
-# bucket = conn.get_bucket("<your-bucket-name>")
 client = boto3.client('s3') #low-level functional API
 resource = boto3.resource('s3') #high-level object-oriented API
 test_bucket = resource.Bucket('pi-1') #subsitute this for your s3 bucket name. 
@@ -27,21 +23,45 @@ def createUser(request):
                 messages.error(request, value)
             return redirect('/registerLoginPage', errors)
         else:
+            imgCount = 0
+            vidCount = 0
             device_number = request.POST['deviceNumber']
             bucket_select = "user" + device_number
             bucket_images = bucket_select + "/images"
             bucket_videos = bucket_select + "/videos"
+            throw_images = bucket_images + "/"
+            throw_videos = bucket_videos + "/"
             this_users_images = test_bucket.objects.filter(Prefix=bucket_images)
             this_users_videos = test_bucket.objects.filter(Prefix=bucket_videos)
-            imgCount = 0
-            vidCount = 0
             User.objects.create(full_name=request.POST['usersName'], email_address=request.POST['usersEmail'], phone_number=request.POST['usersPhone'], number_pics = imgCount, number_vids = vidCount, device_key_name=request.POST['deviceNumber'])
-            Device.objects.create(device_owner = User.objects.get(device_key_name = device_number), device_key_name = "SerialNumber", number_pics = imgCount, number_vids = vidCount)
-            # The above line will be changed to S3 syntax to send the new user information to the database and will create a new user.
             last_user = User.objects.last()
             request.session['user_id'] = last_user.id
+            Device.objects.create(device_owner = User.objects.get(device_key_name = device_number), device_key_name = "SerialNumber", number_pics = imgCount, number_vids = vidCount)
+            user_with_id = User.objects.get(id=request.session['user_id'])
+            this_user_media = Media.objects.filter(uploader=user_with_id)
+            for image in this_users_images:
+                # checkImage = bucket_images + "/" + image.key
+                # print(checkImage)
+                # if test_bucket.objects.filter(Prefix=checkImage):
+                #     print("matching")
+                # else:
+                imgCount+=1
+                Media.objects.create(media_type="images", uploader=user_with_id, s3_key=image.key, event=Event.objects.get(id=1))
+            # The above line will be changed to S3 syntax to send the new user information to the database and will create a new user.
             return redirect('/userPage')
     return redirect('/')
+
+def createEvent(request):
+    if request.method == "POST":
+        errors = Event.objects.basic_validator(request.POST)
+        print(errors)
+        if len(errors):
+            for key, value in errors.items():
+                messages.error(request, value)
+            return redirect('/godMode', errors)
+        else:
+            Event.objects.create(name=request.POST['eventName'], venue_name=request.POST['venueName'], address=request.POST['address'], start_date=request.POST['startDate'], end_date=request.POST['endDate'])
+    return redirect("/godMode")
 
 def login(request):
     if request.method == "POST":
@@ -70,6 +90,7 @@ def userPage(request):
     this_users_files = test_bucket.objects.filter(Prefix=bucket_select)
     this_users_images = test_bucket.objects.filter(Prefix=bucket_images)
     this_users_videos = test_bucket.objects.filter(Prefix=bucket_videos)
+    sqlImages = Media.objects.filter(uploader=user_id.id)
     imgCount = 0
     for image in this_users_images:
         imgCount += 1
@@ -90,8 +111,30 @@ def userPage(request):
         'file_name': file_name,
         'not_bucket_select_img': throw_images,
         'not_bucket_select_vid': throw_videos,
+        "allEvents": Event.objects.all(),
     }
     return render(request, "eventPage.html", context)
+
+def updateSqlDatabase(request):
+    for s3Image in this_users_images:
+        for image in this_user_media:
+            checkImage = bucket_images + "/" + image.s3_key
+            print(checkImage)
+            if test_bucket.objects.filter(Prefix=image.s3_key):
+                print("matching")
+            else:
+                Media.objects.create(media_type="images", uploader=user_with_id, s3_key=image.s3_key, event=Event.objects.get(id=1))
+        
+    imgMatch = 0
+    # for image in this_user_media:
+    #     print(image.s3_key)
+        # for s3_image in this_users_images:
+        #     if 
+
+    return redirect("/userPage")
+
+def viewImage(request):
+    return render(request, "viewImage.html")
 
 def godModeCheck(request):
     if request.method == "POST":
@@ -106,9 +149,11 @@ def godMode(request):
         print("get out of here")
         return redirect('/adminLogin')
     else:
+        event_images = Media.objects.filter(event=1)
         context = {
             'users': User.objects.all(),
-            'devices': Device.objects.all()
+            'devices': Device.objects.all(),
+            'events': Event.objects.all()
         }
         context['objects'] = test_bucket.objects.filter(Prefix='user')
         context['battery'] = test_bucket.objects.filter(Prefix='user2/battery.csv')
@@ -148,9 +193,8 @@ def deleteUser(request, user_id):
     User.objects.get(id=user_id).delete()
     return redirect('/godMode')
 
-def viewImage(request, match):
-    cont = {
-        'image': match
-    }
-    return render(request, "viewImage.html", cont)
+def deleteImage(request, match):
+    print("Delete Image " + match)
+    client.delete_object(Bucket='test_bucket', Key=match)
+    return redirect('/viewUserInfoGodMode')
     
