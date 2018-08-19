@@ -45,8 +45,9 @@ h1{
     color:#027f5b;
 }
 
-h1:hover{
+.title:hover{
     text-decoration: none !important;
+    display: none;
 }
 
 .header{
@@ -78,6 +79,7 @@ h1:hover{
 
 .loginButton>input:hover{
     font-size:1.2em;
+    color: white;
 }
 
 /* Style the video: 100% width and height to cover the entire window */
@@ -99,7 +101,7 @@ h1:hover{
         <div id="container">
             <div class="mainContainer ">
                 <div class="header">
-                    <a href="https://www.glimpsewearables.com/"><h1 style="text-align: center">GlimpseCam</h1></a>
+                    <a href="https://www.glimpsewearables.com/"><h1 style="text-align: center" class="title">GlimpseCam</h1></a>
                 </div>
                 <div class="inputBox">
                     <form action="/registerLoginPage" method="POST" class="loginButton">
