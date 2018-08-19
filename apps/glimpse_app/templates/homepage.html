@@ -19,22 +19,64 @@
     margin: 0px;
     padding: 0px;
 }
+
+body{
+    height: 100vh;
+    width: 100%;
+}
+
+h1{
+    color:#027f5b;
+}
+
+h1:hover{
+    text-decoration: none !important;
+}
+
+.header{
+    margin: 20px;
+}
+#container{
+    height: 100%;
+    position: relative;
+}
+.mainContainer{
+    min-width: 100%;
+    margin: 0 auto 0 auto;
+    position: absolute;
+    top: 30%;
+    transform: translateY(-100%)
+}
+
+.loginButton{
+    display: block;
+    margin: 5px auto 5px auto;
+    max-width: 400px;
+}
+
+.loginButton>input{
+    border: 1px solid grey;
+}
+
+.loginButton>input:hover{
+    font-size:1.2em;
+}
 </style>
 </head>
 <body>
     <div id="container">
-        <div class="header">
-            <a href="https://www.glimpsewearables.com/"><h1 style="text-align: center">GlimpseCam</h1></a>
-        </div>
-        <div class="mainContainer">
+        <div class="mainContainer ">
+            <div class="header">
+                <a href="https://www.glimpsewearables.com/"><h1 style="text-align: center">GlimpseCam</h1></a>
+            </div>
             <div class="inputBox">
-                <form action="/registerLoginPage" method="POST" >
+                <form action="/registerLoginPage" method="POST" class="loginButton">
                     {% csrf_token %}
-                    <input type="submit" value="Register/Login"  class="form-control btn btn-submit">
+                    <input type="submit" value="Register/Login"  class="form-control btn btn-primary">
                 </form>
-                <form action="/adminLogin" method="POST">
+                <form action="/adminLogin" method="POST" class="loginButton">
                     {% csrf_token %}
-                    <input type="submit" value="Admin Login"  class="form-control btn btn-submit">
+                    <input type="submit" value="Admin Login"  class="form-control btn btn-primary">
                 </form>
             </div>
         <div class="footer">
