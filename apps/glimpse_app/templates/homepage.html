@@ -42,7 +42,8 @@ body{
 }
 
 h1{
-    color:#027f5b;
+    color: white;
+    font-weight: 400;
 }
 
 .title:hover{
@@ -56,13 +57,14 @@ h1{
 #container{
     height: 100%;
     position: relative;
+    padding: 20px;
 }
 .mainContainer{
     min-width: 100%;
     margin: 0 auto 0 auto;
     position: absolute;
     top: 30%;
-    transform: translateY(-100%)
+    transform: translateY(-50%)
 }
 
 .loginButton{
@@ -75,11 +77,26 @@ h1{
     border: 2px solid white;
     background-color: transparent;
     color: white;
+    max-width: 90%
 }
 
 .loginButton>input:hover{
     font-size:1.2em;
     color: white;
+}
+
+/* Every other row will be colored */
+@media only screen and (max-width: 600px) {
+    video{
+        display: none;
+    }
+
+    body{
+        background-image: url("../static/glimpse_app/img/hands.jpeg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 100%;
+    }
 }
 
 /* Style the video: 100% width and height to cover the entire window */
