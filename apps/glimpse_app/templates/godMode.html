@@ -13,116 +13,180 @@
     <script src="main.js"></script>
 </head>
 <style>
+body{
+    background-color: #f2f2f2;
+
+}
 .centerHorizontal{
+    padding: 20px;
     text-align: center;
 }
+
 h2{
   padding-left: 20px;
   padding-top: 20px;
 }
+
+h3{
+    font-weight: normal;
+}
+
+.table-wrapper, .form-wrapper{
+    background-color: white;
+    padding: 10px;
+    margin: 20px;
+    max-height: 500px;
+    min-width:335px;
+    max-width: 100%;
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
+.for-wrapper>form>*{
+    margin: 10px;
+}
+
+.btn-primary{
+    margin-top: 10px !important;
+}
+
+.table td, .table th{
+    padding: .5em !important;
+}
+th{
+    font-weight: normal !important;
+}
+
+/* Every other row will be colored */
+@media (min-width: 1px) {
+    tbody:nth-of-type(odd) {
+        background-color: #f9f9f9;
+    }
+}
+
+/* only the first link will be styled  */
+td a:nth-child(1){
+    padding-right: 10px;
+}
+
+.logout{
+    position: absolute;
+    top: 20px;
+    right: 20px;;
+}
 </style>
 <body>
         <div class="container">
+            <a href="/logout" class="logout">Logout</a>
             <div class="header"></div>
-                <h1 class="centerHorizontal">Dylans Users Page</h1>
-                <a href="/logout">Logout</a>
+                <h1 class="centerHorizontal">Dylan's Admin Page</h1>
             </div>
             <div class="contentContainer">
                 <div class="allUserInformation">
-                    <h2>Registered Users</h2>
-                    <table class="table table-hover table-dark">
-                        <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Phone</th>
-                                <th scope="col">Device</th>
-                                <th scope="col">Images</th>
-                                <th scope="col">Videos</th>
-                                <th scope="col">Actions</th>
-                            </tr>
-                        </thead>
-                        {% for user in users %}
+                    <div class="table-wrapper">
+                        <h3>Registered Users</h3>
+                        <table class="table table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Phone</th>
+                                    <th scope="col">Device</th>
+                                    <th scope="col">Images</th>
+                                    <th scope="col">Videos</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            {% for user in users %}
+                                {% csrf_token %}
+                            <tbody>
+                                <td>{{user.full_name}}</td>
+                                <td>{{user.email_address}}</td>
+                                <td>{{user.phone_number}}</td>
+                                <td>{{user.device_key_name}}</td>
+                                <td>{{user.number_pics}}</td>
+                                <td>{{user.number_vids}}</td>
+                                <td>
+                                    <a href="/viewUserInfoGodMode/{{user.device_key_name}}">View</a>
+                                    <a href="/deleteUser/{{user.id}}">Delete</a>
+                                </td>
+                            </tbody>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <div class="table-wrapper">
+                        <h3>Camera Information</h3>
+                        <table class="table table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Serial Number</th>
+                                    <th scope="col">Images</th>
+                                    <th scope="col">Videos</th>
+                                    <th scope="col">RunTime</th>
+                                    <th scope="col">Wifi</th>
+                                </tr>
+                            </thead>
+                            {% for camera in devices %}
                             {% csrf_token %}
-                        <tbody>
-                            <td>{{user.full_name}}</td>
-                            <td>{{user.email_address}}</td>
-                            <td>{{user.phone_number}}</td>
-                            <td>{{user.device_key_name}}</td>
-                            <td>{{user.number_pics}}</td>
-                            <td>{{user.number_vids}}</td>
-                            <td>
-                                <a href="/viewUserInfoGodMode/{{user.device_key_name}}">View</a>
-                                <a href="/deleteUser/{{user.id}}">Delete</a>
-                            </td>
-                        </tbody>
-                        {% endfor %}
-                    </table>
-                    <h2>Camera Information</h2>
-                    <table class="table table-hover table-dark">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Serial Number</th>
-                                <th scope="col">Images</th>
-                                <th scope="col">Videos</th>
-                                <th scope="col">RunTime</th>
-                                <th scope="col">Wifi</th>
-                            </tr>
-                        </thead>
-                        {% for camera in devices %}
-                        {% csrf_token %}
-                        <tbody>
-                            <td>{{camera.device_owner.device_key_name}}</td>
-                            <td>{{camera.device_key_name}}</td>
-                            <td>{{camera.number_pics}}</td>
-                            <td>{{camera.number_vids}}</td>
-                            <td></td>
-                            <td></td>
-                        </tbody>
-                        {% endfor %}
-                    </table>
+                            <tbody>
+                                <td>{{camera.device_owner.device_key_name}}</td>
+                                <td>{{camera.device_key_name}}</td>
+                                <td>{{camera.number_pics}}</td>
+                                <td>{{camera.number_vids}}</td>
+                                <td></td>
+                                <td></td>
+                            </tbody>
+                            {% endfor %}
+                        </table>
+                    </div>
+                   
                     {% if messages %}
                         {% for message in messages %}
                         <p>{{ message }}</p>
                         {% endfor %}
                     {% endif %}
-                    <form action="/createEvent" method="POST" role="form" style="display: block;">
-                        {% csrf_token %}
-                        <input type="text" name="eventName" tabindex="1" class="form-control" placeholder="Event Name">
-                        <input type="text" name="venueName" tabindex="1" class="form-control" placeholder="Venue Name">
-                        <input type="text" name="address" tabindex="1" class="form-control" placeholder="Address">
-                        <input type="date" name="startDate" tabindex="1" class="form-control" placeholder="Start Date">
-                        <input type="date" name="endDate" tabindex="1" class="form-control" placeholder="End Date">
-                        <input type="submit" tabindex="4" class="form-control btn btn-login" value="Create Event">					
-                    </form>
-                    <h2>Event Information</h2>
-                    <table class="table table-hover table-dark">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Venue</th>
-                                <th scope="col">Address</th>
-                                <th scope="col">Images</th>
-                                <th scope="col">Videos</th>
-                                <th scope="col">Dates</th>
-                            </tr>
-                        </thead>
-                        {% for event in events %}
-                        {% csrf_token %}
-                        <tbody>
-                            <td>{{event.id}}</td>
-                            <td>{{event.name}}</td>
-                            <td>{{event.venue_name}}</td>
-                            <td>{{event.address}}</td>
-                            <td>{{event.number_pics}}</td>
-                            <td>{{event.number_vids}}</td>
-                            <td>{{event.start_date}} to {{event.end_date}}</td>
-                            <td></td>
-                        </tbody>
-                        {% endfor %}
-                    </table>
+                    <div class="form-wrapper">
+                        <h3> Create Event</h3>
+                        <form action="/createEvent" method="POST" role="form" style="display: block;">
+                            {% csrf_token %}
+                            <input type="text" name="eventName" tabindex="1" class="form-control" placeholder="Event Name (required)">
+                            <input type="text" name="venueName" tabindex="1" class="form-control" placeholder="Venue Name (required)">
+                            <input type="text" name="address" tabindex="1" class="form-control" placeholder="Address (required)">
+                            <input type="date" name="startDate" tabindex="1" class="form-control" placeholder="Start Date">
+                            <input type="date" name="endDate" tabindex="1" class="form-control" placeholder="End Date">
+                            <input type="submit" tabindex="4" class="form-control btn btn-primary" value="Create Event">					
+                        </form>
+                    </div>
+                    
+                    <div class='table-wrapper'>
+                        <h3>Event Information</h3>
+                        <table class="table table-hover">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Venue</th>
+                                        <th scope="col">Address</th>
+                                        <th scope="col">Images</th>
+                                        <th scope="col">Videos</th>
+                                        <th scope="col">Dates</th>
+                                    </tr>
+                                </thead>
+                                {% for event in events %}
+                                {% csrf_token %}
+                                <tbody>
+                                    <td>{{event.id}}</td>
+                                    <td>{{event.name}}</td>
+                                    <td>{{event.venue_name}}</td>
+                                    <td>{{event.address}}</td>
+                                    <td>{{event.number_pics}}</td>
+                                    <td>{{event.number_vids}}</td>
+                                    <td>{{event.start_date}} to {{event.end_date}}</td>
+                                    <td></td>
+                                </tbody>
+                                {% endfor %}
+                            </table>
+                    </div>
                 </div>
             </div>
         </div>
