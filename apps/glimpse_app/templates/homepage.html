@@ -54,11 +54,16 @@ body{
 h1{
     color: white;
     font-weight: 400;
+    text-align: center;
 }
 
 .title:hover{
     text-decoration: none !important;
-    display: none;
+    cursor:hand;
+}
+
+.no-hover, .no-hover:hover{
+    text-decoration: none;
 }
 
 .header{
@@ -128,8 +133,8 @@ h1{
         <div id="container">
             <div class="mainContainer ">
                 <div class="header">
-                    <a href="https://www.glimpsewearables.com/">
-                        <h1 style="text-align: center" class="title">GlimpseCam</h1>
+                    <a class="no-hover" href="https://www.glimpsewearables.com/">
+                        <h1 class="title">GlimpseCam</h1>
                     </a>
                 </div>
                 <div class="inputBox">
