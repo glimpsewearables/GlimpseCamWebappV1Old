@@ -14,6 +14,15 @@
 
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <!--<script async src="https://www.googletagmanager.com/gtag/js?id=UA-124338385-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+     gtag('js', new Date());
+
+    gtag('config', 'UA-124338385-1');
+    </script> -->
 <style>
 *{
     margin: 0px;
@@ -42,12 +51,18 @@ body{
 }
 
 h1{
-    color:#027f5b;
+    color: white;
+    font-weight: 400;
+    text-align: center;
 }
 
 .title:hover{
     text-decoration: none !important;
-    display: none;
+    cursor:hand;
+}
+
+.no-hover, .no-hover:hover{
+    text-decoration: none;
 }
 
 .header{
@@ -56,13 +71,14 @@ h1{
 #container{
     height: 100%;
     position: relative;
+    padding: 20px;
 }
 .mainContainer{
     min-width: 100%;
     margin: 0 auto 0 auto;
     position: absolute;
     top: 30%;
-    transform: translateY(-100%)
+    transform: translateY(-50%)
 }
 
 .loginButton{
@@ -75,12 +91,27 @@ h1{
     border: 2px solid white;
     background-color: transparent;
     color: white;
+    max-width: 90%
 }
 
 .loginButton>input:hover{
     font-size:1.2em;
     color: white;
 }
+
+/* Every other row will be colored */
+/* @media only screen and (max-width: 600px) {
+    video{
+        display: none;
+    }
+
+    body{
+        background-image: url("../static/glimpse_app/img/hands.jpeg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 100%;
+    }
+} */
 
 /* Style the video: 100% width and height to cover the entire window */
 #myVideo {
@@ -101,7 +132,9 @@ h1{
         <div id="container">
             <div class="mainContainer ">
                 <div class="header">
-                    <a href="https://www.glimpsewearables.com/"><h1 style="text-align: center" class="title">GlimpseCam</h1></a>
+                    <a class="no-hover" href="https://www.glimpsewearables.com/">
+                        <h1 class="title">GlimpseCam</h1>
+                    </a>
                 </div>
                 <div class="inputBox">
                     <form action="/registerLoginPage" method="POST" class="loginButton">
