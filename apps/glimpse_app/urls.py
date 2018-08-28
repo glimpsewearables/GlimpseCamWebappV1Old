@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'^godModeCheck$', views.godModeCheck),
     url(r'^godMode$', views.godMode),
     url(r'^viewUserInfoGodMode/(?P<user_num>\d+)$', views.viewUserInfoGodMode),
-    url(r'^deleteImage/(?P<match>.+)/$', views.deleteImage),
+    url(r'^deleteImage/(?P<match>.+)/(?P<url>.+)$', views.deleteImage),
     url(r'^deleteUser/(?P<user_id>\d+)$', views.deleteUser),
     url(r'^logout$', views.logout),
     url(r'^updateSqlDatabase$', views.updateSqlDatabase),
