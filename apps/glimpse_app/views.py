@@ -15,8 +15,68 @@ def registerLoginPage(request):
 def adminLogin(request):
     return render(request, "adminLogin.html")
 
-# mockArray = [user1, user2 user3, user4]
-# user1 = {userName: "", }
+def returnAllUsers(request):
+    allUsers = test_bucket.objects.filter(Prefix="user")
+    allUsersDict = {}
+    for i in range(1, 100):
+        userName = "user" + str(i)
+        objs = list(test_bucket.objects.filter(Prefix=userName))
+        if len(objs) > 0:
+            bucket_images = userName + "/images"
+            bucket_videos = userName + "/videos"
+            throw_images = bucket_images + "/"
+            throw_videos = bucket_videos + "/"
+            this_users_images = test_bucket.objects.filter(Prefix=bucket_images)
+            this_users_videos = test_bucket.objects.filter(Prefix=bucket_videos)
+            thisUser = test_bucket.objects.filter(Prefix=userName)
+            allImages = []
+            allVideos = []
+            images = test_bucket.objects.filter(Prefix="/images")
+            for image in this_users_images:
+                if image.key != throw_images:
+                    allImages.append(image.key)
+            videos = test_bucket.objects.filter(Prefix=userName + "/videos")
+            for video in this_users_videos:
+                if video.key != throw_videos:
+                    allVideos.append(video.key)
+                allVideos.append(video.key)
+            newDict = {"images": allImages,
+                        "videos": allVideos,        
+            }
+            allUsersDict[userName] = newDict
+        else:
+            return allUsersDict
+        # if test_bucket.objects.filter(Prefix=userName).count() > 0:
+        #     thisUser = test_bucket.objects.filter(Prefix=userName)
+        #     allUsersDict.update({userName:thisUser})
+    return allUsersDict
+
+def returnOneUser(request):
+    thisUserInfo = {}
+    device_number = request.session['deviceId']
+    userName = "user" + str(device_number)
+    bucket_images = userName + "/images"
+    bucket_videos = userName + "/videos"
+    throw_images = bucket_images + "/"
+    throw_videos = bucket_videos + "/"
+    this_users_images = test_bucket.objects.filter(Prefix=bucket_images)
+    this_users_videos = test_bucket.objects.filter(Prefix=bucket_videos)
+    thisUser = test_bucket.objects.filter(Prefix=userName)
+    allImages = []
+    allVideos = []
+    images = test_bucket.objects.filter(Prefix="/images")
+    for image in this_users_images:
+        if image.key != throw_images:
+            allImages.append(image.key)
+    videos = test_bucket.objects.filter(Prefix=userName + "/videos")
+    for video in this_users_videos:
+        if video.key != throw_videos:
+            allVideos.append(video.key)
+    newDict = {"images": allImages,
+                "videos": allVideos,        
+    } 
+    thisUserInfo[userName] = newDict
+    return thisUserInfo
 
 def createUser(request):
     if request.method=="POST":
@@ -43,6 +103,7 @@ def createUser(request):
             request.session['user_id'] = last_user.id
             Device.objects.create(device_owner = User.objects.get(device_key_name = device_number), device_key_name = "SerialNumber", number_pics = imgCount, number_vids = vidCount)
             user_with_id = User.objects.get(id=request.session['user_id'])
+            request.session["deviceId"] = request.POST['deviceNumber']
             # The above line will be changed to S3 syntax to send the new user information to the database and will create a new user.
             return redirect('/userPage')
     return redirect('/')
@@ -72,6 +133,7 @@ def login(request):
             user = User.objects.get(email_address=passEmail)
             if user.device_key_name == request.POST['deviceNumber']:
                 request.session['user_id'] = user.id
+                request.session["deviceId"] = request.POST['deviceNumber']
                 return redirect('/userPage')
     return redirect('/')
 
