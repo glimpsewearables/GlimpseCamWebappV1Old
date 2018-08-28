@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^login$', views.login),
     url(r'^adminLogin$', views.adminLogin),
     url(r'^userPage$', views.userPage),
+    url(r'^returnOneUser$', views.returnOneUser),
     url(r'^viewImage$', views.viewImage),
     url(r'^godModeCheck$', views.godModeCheck),
     url(r'^godMode$', views.godMode),
