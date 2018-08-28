@@ -85,6 +85,7 @@ def login(request):
     return redirect('/')
 
 def userPage(request):
+    allUsers = test_bucket.objects.filter(Prefix="user")
     user_id = User.objects.get(id=request.session['user_id'])
     device_id = Device.objects.get(device_owner = user_id.id)
     device_number = user_id.device_key_name
@@ -120,7 +121,12 @@ def userPage(request):
         'not_bucket_select_vid': throw_videos,
         "allEvents": Event.objects.all(),
     }
-    return render(request, "eventPage.html", context)
+    imagesVideos = {
+        'userName':user_id.full_name,
+        'images': this_users_images,
+        'videos': this_users_videos,
+    }
+    return render(request, "eventPage.html", context, imagesVideos)
 
 def updateSqlDatabase(request):
     for s3Image in this_users_images:
