@@ -16,5 +16,11 @@ Including another URLconf
 from django.conf.urls import url, include # make sure to add include 
 
 urlpatterns = [
+<<<<<<< HEAD
     url(r'^', include('apps.glimpse_app.urls')),
 ]
+=======
+  url(r'^', include('apps.glimpse_app.urls')),
+]
+
+>>>>>>> ceef5e92c4bf9f108b5144065fc168485cd03953
