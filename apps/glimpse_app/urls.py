@@ -15,5 +15,4 @@ urlpatterns = [
     url(r'^deleteImage/(?P<match>.+)/(?P<url>.+)$', views.deleteImage),
     url(r'^deleteUser/(?P<user_id>\d+)$', views.deleteUser),
     url(r'^logout$', views.logout),
-    url(r'^updateSqlDatabase$', views.updateSqlDatabase),
 ]  

@@ -43,16 +43,6 @@ def createUser(request):
             request.session['user_id'] = last_user.id
             Device.objects.create(device_owner = User.objects.get(device_key_name = device_number), device_key_name = "SerialNumber", number_pics = imgCount, number_vids = vidCount)
             user_with_id = User.objects.get(id=request.session['user_id'])
-            this_user_media = Media.objects.filter(uploader=user_with_id)
-            for image in this_users_images:
-                # checkImage = bucket_images + "/" + image.key
-                # print(checkImage)
-                # if test_bucket.objects.filter(Prefix=checkImage):
-                #     print("matching")
-                # else:
-                imgCount+=1
-                Media.objects.create(media_type="images", uploader=user_with_id, s3_key=image.key, event=Event.objects.get(id=1))
-            # The above line will be changed to S3 syntax to send the new user information to the database and will create a new user.
             return redirect('/userPage')
     return redirect('/')
 
@@ -97,7 +87,6 @@ def userPage(request):
     this_users_files = test_bucket.objects.filter(Prefix=bucket_select)
     this_users_images = test_bucket.objects.filter(Prefix=bucket_images)
     this_users_videos = test_bucket.objects.filter(Prefix=bucket_videos)
-    sqlImages = Media.objects.filter(uploader=user_id.id)
     imgCount = 0
     for image in this_users_images:
         imgCount += 1
@@ -122,24 +111,6 @@ def userPage(request):
     }
     return render(request, "eventPage.html", context)
 
-def updateSqlDatabase(request):
-    for s3Image in this_users_images:
-        for image in this_user_media:
-            checkImage = bucket_images + "/" + image.s3_key
-            print(checkImage)
-            if test_bucket.objects.filter(Prefix=image.s3_key):
-                print("matching")
-            else:
-                Media.objects.create(media_type="images", uploader=user_with_id, s3_key=image.s3_key, event=Event.objects.get(id=1))
-        
-    imgMatch = 0
-    # for image in this_user_media:
-    #     print(image.s3_key)
-        # for s3_image in this_users_images:
-        #     if 
-
-    return redirect("/userPage")
-
 def viewImage(request):
     return render(request, "viewImage.html")
 
@@ -156,7 +127,6 @@ def godMode(request):
         print("get out of here")
         return redirect('/adminLogin')
     else:
-        event_images = Media.objects.filter(event=1)
         context = {
             'users': User.objects.all(),
             'devices': Device.objects.all(),
