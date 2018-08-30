@@ -17,6 +17,7 @@
 <style>
     body {
         padding-top: 90px;
+        background-color: #2B0B38; 
     }
     .panel-login {
         border-color: #ccc;
@@ -24,9 +25,11 @@
         -moz-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
         box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
     }
+    .panel{
+        background-color: #EF4F52;
+    }
     .panel-login>.panel-heading {
         color: #00415d;
-        background-color: #fff;
         border-color: #fff;
         text-align:center;
     }
@@ -40,7 +43,7 @@
         transition: all 0.1s linear;
     }
     .panel-login>.panel-heading a.active{
-        color: #029f5b;
+        color: #E9CDC9;
         font-size: 18px;
     }
     .panel-login>.panel-heading hr{
@@ -71,20 +74,21 @@
         border-color: #ccc;
     }
     .btn-login {
-        background-color: #59B2E0;
+        background-color: #2B0B38; 
+        
         outline: none;
-        color: #fff;
+        color: #E9CDC9;
         font-size: 14px;
         height: auto;
         font-weight: normal;
         padding: 14px 0;
         text-transform: uppercase;
-        border-color: #59B2E6;
     }
     .btn-login:hover,
     .btn-login:focus {
-        color: #fff;
-        background-color: #53A3CD;
+        color: #E9CDC9;
+        background-color:  #563862;
+        
         border-color: #53A3CD;
     }
     .forgot-password {
@@ -98,23 +102,26 @@
     }
 
     .btn-register {
-        background-color: #1CB94E;
+        background-color: #2B0B38; 
         outline: none;
-        color: #fff;
+        color: #E9CDC9;
         font-size: 14px;
         height: auto;
         font-weight: normal;
         padding: 14px 0;
         text-transform: uppercase;
-        border-color: #1CB94A;
     }
     .btn-register:hover,
     .btn-register:focus {
         color: #fff;
-        background-color: #1CA347;
-        border-color: #1CA347;
+        background-color: #563862;
     }
-
+    .input{
+        background-color: #E9CDC9;
+    }
+    .fontColor{
+        color: #E9CDC9;
+    }
 </style>
 <div class="container">
         <div class="row">
@@ -123,10 +130,10 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-xs-6">
-                                <a href="#" class="active" id="login-form-link">Login</a>
+                                <a href="#" class="active fontColor" id="login-form-link">Login</a>
                             </div>
                             <div class="col-xs-6">
-                                <a href="#" id="register-form-link">Register</a>
+                                <a href="#" id="register-form-link" class="fontColor">Register</a>
                             </div>
                         </div>
                         <hr>
@@ -145,7 +152,7 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-sm-6 col-sm-offset-3">
-                                                <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
+                                                <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login fontColor" value="Log In">
                                             </div>
                                         </div>
                                     </div>
@@ -167,7 +174,7 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-sm-6 col-sm-offset-3">
-                                                <input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Sign Up">
+                                                <input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register fontColor" value="Sign Up">
                                             </div>
                                         </div>
                                     </div>
