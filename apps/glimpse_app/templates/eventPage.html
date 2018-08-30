@@ -23,6 +23,8 @@
 
 </head>
 <style>
+
+    
   .gallery-block.grid-gallery{
       padding-bottom: 60px;
       padding-top: 60px;
@@ -46,12 +48,6 @@
   .gallery-block.grid-gallery .item{
       margin-bottom: 20px;
   }
-    @media (min-width: 576px) {
-      .gallery-block.grid-gallery .scale-on-hover:hover{
-          transform: scale(1.05);
-          box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.15) !important;
-      }
-  }
   .tabnav{
       color: blue;
       padding-top: 1em;
@@ -68,10 +64,10 @@
   }
   .gallery-header-text{
     text-align: center;
-    font-size:1.9em;
+    font-size:2.1em;
     padding-top: 1em;
     font-weight: bold;
-    color: #444;
+    color: #563862;
   }
   .gallery-header-container{
   }
@@ -92,7 +88,7 @@
     transition: all 0.1s linear;
   }
   .panel-heading a.active{
-    color: #027f5b;
+    color: #563862;
     font-size: 18px;
   }
   .panel-heading hr{
@@ -109,6 +105,17 @@
   .notActive{
     display: none;
   }
+  .caption{
+      margin-bottom: 10px;
+  }
+
+  .caption > ul{
+    list-style: none;
+    margin:0;
+    padding: 0;
+  }
+
+  
 </style>
 </head>
 <body>
@@ -116,8 +123,8 @@
     <div class="tab-content center-block">
       <div class="heading">
           <h2 class="gallery-header-text">{{name}}'s Gallery</h2>
-          <a style="float: left" href="javascript:history.back()"><i class="fas fa-arrow-left" style="font-size:2em; color:#027f5b"></i></a>
-          <a style="float: right" href="/logout"> <i class="fas fa-sign-out-alt" style="font-size:2em; color:#027f5b"></i></a>
+          <a style="float: left" href="javascript:history.back()"><i class="fas fa-arrow-left" style="font-size:2em; color:#563862"></i></a>
+          <a style="float: right" href="/logout"> <i class="fas fa-sign-out-alt" style="font-size:2em; color:#563862"></i></a>
       </div>
       <div class="panel-heading">
         <div class="row">
@@ -131,18 +138,23 @@
         <hr>
       </div>
         <div id="images" class="tab-pane fade in active">
-            <section class="gallery-block grid-gallery">
+            <section class="">
                 <div class="container">
                     <div class="row">
                         {% for image in this_user_images %}
                             {% if image.key != not_bucket_select_img %}
                             {% csrf_token %}
-                            <div class="item">
-                                <a class="lightbox" href="https://s3.amazonaws.com/pi-1/{{image.key}}">
-                                    <img class="img-fluid image scale-on-hover" src="https://s3.amazonaws.com/pi-1/{{image.key}}">
-                                </a>
-                            </div>
-                            <!-- <a href="/deleteImage/{{image.key}}/userPage" style="margin:20px;">Delete Image</a> -->
+                                <div class="item">
+                                    <a class="lightbox" href="https://s3.amazonaws.com/pi-1/{{image.key}}" data-title="{{image.key}}" download>
+                                        <img class="img-fluid image scale-on-hover" src="https://s3.amazonaws.com/pi-1/{{image.key}}">
+                                    </a>
+                                </div>
+                                <div class="caption">
+                                    <ul class="captions">
+                                        <li>{{image.key}}</li>
+                                    </ul>
+                                </div>
+                                <!-- <a href="/deleteImage/{{image.key}}/userPage" style="margin:20px;">Delete Image</a> -->
                             {% endif %}
                         {% endfor %}
                     </div>
