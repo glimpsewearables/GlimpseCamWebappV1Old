@@ -15,6 +15,9 @@ def registerLoginPage(request):
 def adminLogin(request):
     return render(request, "adminLogin.html")
 
+# mockArray = [user1, user2 user3, user4]
+# user1 = {userName: "", }
+
 def createUser(request):
     if request.method=="POST":
         errors = User.objects.basic_validator(request.POST)
@@ -33,25 +36,19 @@ def createUser(request):
             throw_videos = bucket_videos + "/"
             this_users_images = test_bucket.objects.filter(Prefix=bucket_images)
             this_users_videos = test_bucket.objects.filter(Prefix=bucket_videos)
-            User.objects.create(full_name=request.POST['usersName'], email_address=request.POST['usersEmail'], phone_number=request.POST['usersPhone'], number_pics = imgCount, number_vids = vidCount, device_key_name=request.POST['deviceNumber'])
+            newEmail = request.POST['usersEmail']
+            print(newEmail.lower())
+            User.objects.create(full_name=request.POST['usersName'], email_address=newEmail.lower(), phone_number=request.POST['usersPhone'], number_pics = imgCount, number_vids = vidCount, device_key_name=request.POST['deviceNumber'])
             last_user = User.objects.last()
             request.session['user_id'] = last_user.id
             Device.objects.create(device_owner = User.objects.get(device_key_name = device_number), device_key_name = "SerialNumber", number_pics = imgCount, number_vids = vidCount)
             user_with_id = User.objects.get(id=request.session['user_id'])
-            this_user_media = Media.objects.filter(uploader=user_with_id)
-            for image in this_users_images:
-                # checkImage = bucket_images + "/" + image.key
-                # print(checkImage)
-                # if test_bucket.objects.filter(Prefix=checkImage):
-                #     print("matching")
-                # else:
-                imgCount+=1
-                Media.objects.create(media_type="images", uploader=user_with_id, s3_key=image.key, event=Event.objects.get(id=1))
-            # The above line will be changed to S3 syntax to send the new user information to the database and will create a new user.
             return redirect('/userPage')
     return redirect('/')
 
 def createEvent(request):
+    if isLoggedIn() == "false":
+        return redirect("")
     if request.method == "POST":
         errors = Event.objects.basic_validator(request.POST)
         print(errors)
@@ -70,14 +67,18 @@ def login(request):
             for key, value in errors.items():
                 messages.error(request, value)
             return redirect('/registerLoginPage', errors)
-        if User.objects.filter(email_address=request.POST['emailsLogin']):
-            user = User.objects.get(email_address=request.POST['emailsLogin'])
+        checkEmail = request.POST['emailsLogin']
+        passEmail = checkEmail.lower()
+        if User.objects.filter(email_address=passEmail):
+            user = User.objects.get(email_address=passEmail)
             if user.device_key_name == request.POST['deviceNumber']:
                 request.session['user_id'] = user.id
                 return redirect('/userPage')
     return redirect('/')
 
 def userPage(request):
+    if isLoggedIn(request) == "false":
+        return redirect("")
     user_id = User.objects.get(id=request.session['user_id'])
     device_id = Device.objects.get(device_owner = user_id.id)
     device_number = user_id.device_key_name
@@ -90,7 +91,6 @@ def userPage(request):
     this_users_files = test_bucket.objects.filter(Prefix=bucket_select)
     this_users_images = test_bucket.objects.filter(Prefix=bucket_images)
     this_users_videos = test_bucket.objects.filter(Prefix=bucket_videos)
-    sqlImages = Media.objects.filter(uploader=user_id.id)
     imgCount = 0
     for image in this_users_images:
         imgCount += 1
@@ -115,24 +115,6 @@ def userPage(request):
     }
     return render(request, "eventPage.html", context)
 
-def updateSqlDatabase(request):
-    for s3Image in this_users_images:
-        for image in this_user_media:
-            checkImage = bucket_images + "/" + image.s3_key
-            print(checkImage)
-            if test_bucket.objects.filter(Prefix=image.s3_key):
-                print("matching")
-            else:
-                Media.objects.create(media_type="images", uploader=user_with_id, s3_key=image.s3_key, event=Event.objects.get(id=1))
-        
-    imgMatch = 0
-    # for image in this_user_media:
-    #     print(image.s3_key)
-        # for s3_image in this_users_images:
-        #     if 
-
-    return redirect("/userPage")
-
 def viewImage(request):
     return render(request, "viewImage.html")
 
@@ -149,7 +131,6 @@ def godMode(request):
         print("get out of here")
         return redirect('/adminLogin')
     else:
-        event_images = Media.objects.filter(event=1)
         context = {
             'users': User.objects.all(),
             'devices': Device.objects.all(),
@@ -160,6 +141,8 @@ def godMode(request):
         return render(request, "godMode.html", context)
 
 def viewUserInfoGodMode(request, user_num):
+    if request.session["user_id"] != 0:
+        return redirect("/adminLogin")
     user_id = User.objects.get(device_key_name=user_num)
     bucket_select = "user" + user_num
     bucket_images = bucket_select + "/images"
@@ -190,11 +173,21 @@ def logout(request):
     return redirect('/')
 
 def deleteUser(request, user_id):
+    if isLoggedIn(request) == "false":
+        return redirect("")
     User.objects.get(id=user_id).delete()
     return redirect('/godMode')
 
-def deleteImage(request, match):
+def deleteImage(request, match, url):
+    if isLoggedIn(request) == "false":
+        return redirect("")
     print("Delete Image " + match)
-    client.delete_object(Bucket='test_bucket', Key=match)
-    return redirect('/viewUserInfoGodMode')
+    # client.delete_object(Bucket='test_bucket', Key=match)
+    return redirect('/' + url)
+
+def isLoggedIn(request):
+    if request.session['user_id'] != None:
+        return "true"
+    else: 
+        return "false"
     

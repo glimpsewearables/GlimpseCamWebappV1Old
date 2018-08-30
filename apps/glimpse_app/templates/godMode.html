@@ -24,33 +24,28 @@
 </head>
 <style>
 body{
-    background-color: #f2f2f2;
+    background-color: #2B0B38; 
 
 }
 .centerHorizontal{
     padding: 20px;
     text-align: center;
 }
+h1{
+    color: #E9CDC9;
+}
 
 h2{
   padding-left: 20px;
   padding-top: 20px;
+  color: #E9CDC9;
 }
 
 h3{
     font-weight: normal;
+    color: #E9CDC9;
 }
 
-.table-wrapper, .form-wrapper{
-    background-color: white;
-    padding: 10px;
-    margin: 20px;
-    max-height: 500px;
-    min-width:335px;
-    max-width: 100%;
-    overflow-x: scroll;
-    overflow-y: scroll;
-}
 .for-wrapper>form>*{
     margin: 10px;
 }
@@ -69,10 +64,16 @@ th{
 /* Every other row will be colored */
 @media (min-width: 1px) {
     tbody:nth-of-type(odd) {
-        background-color: #f9f9f9;
+        background-color: #E9CDC9;
+        color: #563862;
     }
 }
-
+@media (min-width: 1px) {
+    tbody:nth-of-type(even) {
+        background-color: #563862;
+        color: #E9CDC9;
+    }
+}
 /* only the first link will be styled  */
 td a:nth-child(1){
     padding-right: 10px;
@@ -82,6 +83,9 @@ td a:nth-child(1){
     position: absolute;
     top: 20px;
     right: 20px;;
+}
+.allUserInformation{
+    background-color: #2B0B38;
 }
 </style>
 <body>
@@ -150,7 +154,7 @@ td a:nth-child(1){
                         </table>
                     </div>
                    
-                    {% if messages %}
+                    <!-- {% if messages %}
                         {% for message in messages %}
                         <p>{{ message }}</p>
                         {% endfor %}
@@ -166,7 +170,7 @@ td a:nth-child(1){
                             <input type="date" name="endDate" tabindex="1" class="form-control" placeholder="End Date">
                             <input type="submit" tabindex="4" class="form-control btn btn-primary" value="Create Event">					
                         </form>
-                    </div>
+                    </div> 
                     
                     <div class='table-wrapper'>
                         <h3>Event Information</h3>
@@ -196,7 +200,7 @@ td a:nth-child(1){
                                 </tbody>
                                 {% endfor %}
                             </table>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
