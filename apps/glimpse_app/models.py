@@ -24,10 +24,10 @@ class UserManager(models.Manager):
         return errors
     def login_validator(self, postData):
         errors = {}
-        if not User.objects.filter(email_address = postData['emailsLogin']):
+        if not User.objects.filter(email_address = postData['emailsLogin'].lower()):
             errors['emailMismatch'] = ("Make sure you have already registered or are entering your email correctly")
-        elif User.objects.filter(email_address = postData['emailsLogin']):
-            user = User.objects.get(email_address = postData['emailsLogin'])
+        elif User.objects.filter(email_address = postData['emailsLogin'].lower()):
+            user = User.objects.get(email_address = postData['emailsLogin'].lower())
             if postData['deviceNumber'] != user.device_key_name:
                 errors['checkDevice'] = ("Make sure you enter the correct device number")
         return errors
@@ -77,3 +77,4 @@ class Media(models.Model):
     s3_key = models.CharField(max_length=245)
     event = models.ForeignKey(Event, related_name="media_at_event")
     created_at = models.DateTimeField(auto_now_add=True)
+    

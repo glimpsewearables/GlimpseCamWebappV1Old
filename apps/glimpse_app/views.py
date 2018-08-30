@@ -15,6 +15,9 @@ def registerLoginPage(request):
 def adminLogin(request):
     return render(request, "adminLogin.html")
 
+# mockArray = [user1, user2 user3, user4]
+# user1 = {userName: "", }
+
 def createUser(request):
     if request.method=="POST":
         errors = User.objects.basic_validator(request.POST)
@@ -33,7 +36,9 @@ def createUser(request):
             throw_videos = bucket_videos + "/"
             this_users_images = test_bucket.objects.filter(Prefix=bucket_images)
             this_users_videos = test_bucket.objects.filter(Prefix=bucket_videos)
-            User.objects.create(full_name=request.POST['usersName'], email_address=request.POST['usersEmail'], phone_number=request.POST['usersPhone'], number_pics = imgCount, number_vids = vidCount, device_key_name=request.POST['deviceNumber'])
+            newEmail = request.POST['usersEmail']
+            print(newEmail.lower())
+            User.objects.create(full_name=request.POST['usersName'], email_address=newEmail.lower(), phone_number=request.POST['usersPhone'], number_pics = imgCount, number_vids = vidCount, device_key_name=request.POST['deviceNumber'])
             last_user = User.objects.last()
             request.session['user_id'] = last_user.id
             Device.objects.create(device_owner = User.objects.get(device_key_name = device_number), device_key_name = "SerialNumber", number_pics = imgCount, number_vids = vidCount)
@@ -70,8 +75,10 @@ def login(request):
             for key, value in errors.items():
                 messages.error(request, value)
             return redirect('/registerLoginPage', errors)
-        if User.objects.filter(email_address=request.POST['emailsLogin']):
-            user = User.objects.get(email_address=request.POST['emailsLogin'])
+        checkEmail = request.POST['emailsLogin']
+        passEmail = checkEmail.lower()
+        if User.objects.filter(email_address=passEmail):
+            user = User.objects.get(email_address=passEmail)
             if user.device_key_name == request.POST['deviceNumber']:
                 request.session['user_id'] = user.id
                 return redirect('/userPage')
@@ -193,8 +200,8 @@ def deleteUser(request, user_id):
     User.objects.get(id=user_id).delete()
     return redirect('/godMode')
 
-def deleteImage(request, match):
+def deleteImage(request, match, url):
     print("Delete Image " + match)
-    client.delete_object(Bucket='test_bucket', Key=match)
-    return redirect('/viewUserInfoGodMode')
+    # client.delete_object(Bucket='test_bucket', Key=match)
+    return redirect('/' + url)
     
