@@ -77,4 +77,3 @@ class Media(models.Model):
     s3_key = models.CharField(max_length=245)
     event = models.ForeignKey(Event, related_name="media_at_event")
     created_at = models.DateTimeField(auto_now_add=True)
-    
