@@ -47,6 +47,8 @@ def createUser(request):
     return redirect('/')
 
 def createEvent(request):
+    if isLoggedIn() == "false":
+        return redirect("")
     if request.method == "POST":
         errors = Event.objects.basic_validator(request.POST)
         print(errors)
@@ -75,6 +77,8 @@ def login(request):
     return redirect('/')
 
 def userPage(request):
+    if isLoggedIn(request) == "false":
+        return redirect("")
     user_id = User.objects.get(id=request.session['user_id'])
     device_id = Device.objects.get(device_owner = user_id.id)
     device_number = user_id.device_key_name
@@ -137,6 +141,8 @@ def godMode(request):
         return render(request, "godMode.html", context)
 
 def viewUserInfoGodMode(request, user_num):
+    if request.session["user_id"] != 0:
+        return redirect("/adminLogin")
     user_id = User.objects.get(device_key_name=user_num)
     bucket_select = "user" + user_num
     bucket_images = bucket_select + "/images"
@@ -167,11 +173,21 @@ def logout(request):
     return redirect('/')
 
 def deleteUser(request, user_id):
+    if isLoggedIn(request) == "false":
+        return redirect("")
     User.objects.get(id=user_id).delete()
     return redirect('/godMode')
 
 def deleteImage(request, match, url):
+    if isLoggedIn(request) == "false":
+        return redirect("")
     print("Delete Image " + match)
     # client.delete_object(Bucket='test_bucket', Key=match)
     return redirect('/' + url)
+
+def isLoggedIn(request):
+    if request.session['user_id'] != None:
+        return "true"
+    else: 
+        return "false"
     
